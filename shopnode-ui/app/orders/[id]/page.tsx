@@ -13,7 +13,8 @@ export default function OrderPage({ params }: { params: { id: string } }) {
 
   useEffect(() => {
     const token = localStorage.getItem('access_token');
-    fetch(`http://localhost:8000/orders/${params.id}`, {
+    const apiUrl = process.env.NEXT_PUBLIC_SHOPNODE_API_URL || 'http://localhost:8000';
+    fetch(`${apiUrl}/orders/${params.id}`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => res.json())

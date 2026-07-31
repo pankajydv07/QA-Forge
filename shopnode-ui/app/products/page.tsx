@@ -17,7 +17,8 @@ export default function ProductsPage() {
 
   useEffect(() => {
     const token = localStorage.getItem('access_token');
-    fetch('http://localhost:8000/products', {
+    const apiUrl = process.env.NEXT_PUBLIC_SHOPNODE_API_URL || 'http://localhost:8000';
+    fetch(`${apiUrl}/products`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => res.json())

@@ -35,7 +35,8 @@ export default function CartPage() {
 
   const handleCheckout = async () => {
     const token = localStorage.getItem('access_token');
-    const res = await fetch('http://localhost:8000/orders', {
+    const apiUrl = process.env.NEXT_PUBLIC_SHOPNODE_API_URL || 'http://localhost:8000';
+    const res = await fetch(`${apiUrl}/orders`, {
       method: 'POST',
       headers: { Authorization: `Bearer ${token}` }
     });
