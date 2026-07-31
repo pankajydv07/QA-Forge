@@ -1,0 +1,33 @@
+name: Pact Contract Verification
+
+on:
+  push:
+    paths:
+      - 'shopnode-api/**'
+      - 'qa-forge/src/contracts/**'
+
+jobs:
+  pact-verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: npm run setup
+
+      - name: Start shopnode-api
+        run: |
+          cd shopnode-api && uvicorn main:app --port 8000 &
+          sleep 5
+
+      - name: Run Consumer Contract Tests
+        run: cd qa-forge && npx vitest run src/contracts/consumer/
+
+      - name: Run Provider Verification
+        run: cd qa-forge && npx ts-node src/contracts/provider/verifier.ts

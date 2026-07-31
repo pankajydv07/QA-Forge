@@ -1,0 +1,9 @@
+{
+  "name": "qa-forge-monorepo",
+  "private": true,
+  "description": "QA Forge — AI-Powered Playwright Test Automation Framework monorepo",
+  "workspaces": ["qa-forge"],
+  "scripts": {
+    "setup": "cd shopnode-api && pip install -r requirements.txt && cd ../shopnode-ui && npm ci && cd ../qa-forge && npm ci"
+  }
+}

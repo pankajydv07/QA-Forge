@@ -1,0 +1,41 @@
+name: Nightly Pipeline
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  nightly:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: npm run setup
+
+      - name: Start Target App
+        run: |
+          cd shopnode-api && uvicorn main:app --port 8000 &
+          cd shopnode-ui && npm run dev &
+          sleep 10
+
+      - name: Run Full E2E & Visual Regression Suite
+        run: cd qa-forge && npx playwright test
+
+      - name: Run k6 Load Test
+        uses: grafana/k6-action@v0.3.1
+        with:
+          filename: qa-forge/k6/checkout.js
+        env:
+          BASE_URL: http://localhost:8000

@@ -1,0 +1,53 @@
+# Dependencies
+node_modules/
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Build outputs
+dist/
+build/
+.next/
+out/
+
+# Environment
+.env
+.env.local
+.env*.local
+
+# Logs
+*.log
+npm-debug.log*
+
+# Test artifacts
+playwright-report/
+allure-results/
+allure-report/
+test-results/
+healing-log/
+metrics/
+failure-analysis/
+reports/
+playwright/.auth/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# k6
+k6/
+
+# SQLite databases
+*.db
+*.db-shm
+*.db-wal
+.agents/
+.specify/
+specs/

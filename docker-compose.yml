@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  shopnode-api:
+    build:
+      context: ./shopnode-api
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+  shopnode-ui:
+    build:
+      context: ./shopnode-ui
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3000"
+    depends_on:
+      shopnode-api:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+  qa-forge:
+    build:
+      context: ./qa-forge
+      dockerfile: Dockerfile
+    environment:
+      - SHOPNODE_API_URL=http://shopnode-api:8000
+      - SHOPNODE_UI_URL=http://shopnode-ui:3000
+      - GROQ_API_KEY=${GROQ_API_KEY}
+    depends_on:
+      shopnode-ui:
+        condition: service_healthy
